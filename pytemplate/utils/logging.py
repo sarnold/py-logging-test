@@ -1,9 +1,17 @@
 
 import logging
+import logging.handlers
 from typing import List, Dict
 
 # # Initialize logger - get package root name (e.g. __name__ = mypackage.utils -> mypackage)
 logger = logging.getLogger(__name__.split(".")[0])
+
+# def getLogger(name: str) -> "TemplateLoggerAdapter":
+    # logger = logging.getLogger("Template" + '.' + name)
+    # # Forcely enable logger
+    # logger.disabled = False
+    # # wrap logger by SphinxLoggerAdapter
+    # return TemplateLoggerAdapter(logger, {})
 
 
 class JsonFormatter(logging.Formatter):
@@ -26,8 +34,8 @@ class JsonFormatter(logging.Formatter):
         from json import dumps
         self.dumps = dumps
 
-    def format(self, record) -> str:
-        """Define how to log record is translated to string.
+    def format(self, record: logging.LogRecord) -> str:
+        """Define how log record is translated to string.
 
         This function is defined in logging.Formatter and is overriden here
         with a custom implementation that returns JSON.
@@ -38,7 +46,7 @@ class JsonFormatter(logging.Formatter):
 
         attr_dict = record.__dict__
         # Convert time from UNIX to string
-        attr_dict['asctime'] = self.formatTime(record)
+        attr_dict['asctime'] = super().format(record)
         # Reassign name from 'msg' to 'message' to match typical formatter name
         attr_dict['message'] = attr_dict['msg']
         attr_dict = {k:v for k,v in attr_dict.items() if k in self.attributes}
