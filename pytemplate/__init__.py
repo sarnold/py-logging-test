@@ -1,3 +1,3 @@
 
-from .utils.logger import *
+from .utils.logging import *
 from pytemplate.template import template_function
